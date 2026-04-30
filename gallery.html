@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Galeri – PIONERA GENERATION 2025 | MA Al-Fakhriyah</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- ═══════ NAVBAR ═══════ -->
+<nav id="nav" class="scrolled">
+  <a href="index.html" class="nl">
+    <img src="assets/logo.png" alt="Pionera" onerror="this.style.display='none'"/>
+    <div class="nl-txt">PIONERA <small>FIRST GEN 2025</small></div>
+  </a>
+  <ul class="nlinks">
+    <li><a href="index.html">← Beranda</a></li>
+    <li><a href="index.html#guru">Guru</a></li>
+    <li><a href="index.html#murid">Santri</a></li>
+    <li><a href="#video">Video</a></li>
+    <li class="ncta"><a href="gallery.html">Galeri</a></li>
+  </ul>
+  <button class="ham" id="hamBtn" aria-label="Menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mob-bg" id="mobBg"></div>
+<nav class="mob-drawer" id="mobDrawer">
+  <a href="index.html"        class="mob-link">← Beranda</a>
+  <a href="index.html#guru"   class="mob-link">Para Guru</a>
+  <a href="index.html#murid"  class="mob-link">Santri</a>
+  <a href="#video"            class="mob-link">Video Kenangan</a>
+  <a href="#galeri"           class="mob-link">Galeri Foto</a>
+</nav>
+
+<!-- ═══════ HERO ═══════ -->
+<div class="gal-hero">
+  <div class="gal-hero-in">
+    <span class="st">Kenangan Visual</span>
+    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(2.2rem,7vw,4rem);color:#e8f0fa;line-height:1.2;margin-bottom:.5rem">Galeri Kenangan</h1>
+    <div class="sr"></div>
+    <p class="sd" style="margin:0 auto">Setiap foto dan video menyimpan cerita, tawa, air mata, dan kenangan yang tak akan pernah tergantikan. 2022–2025.</p>
+  </div>
+</div>
+
+<!-- ═══════ VIDEO SECTION ═══════ -->
+<section id="video" class="sec sec-alt">
+  <div class="inn">
+    <div class="sh rv">
+      <span class="st">Kenangan Dalam Video</span>
+      <h2>Video Pionera</h2>
+      <div class="sr"></div>
+      <p class="sd">Pilih video kenangan yang ingin ditonton dari daftar di samping.</p>
+    </div>
+    <div class="gvid-card rv">
+      <div class="gvid-main" id="gvMain">
+        <div class="gvid-ph"><div class="gvph-icon">▶</div><p class="gvph-txt">Memuat video...</p></div>
+      </div>
+      <div class="gvid-sidebar" id="gvSidebar"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════ GALLERY PHOTOS ═══════ -->
+<section id="galeri" class="sec">
+  <div class="inn">
+    <div class="sh rv">
+      <span class="st">Galeri Foto</span>
+      <h2>Momen Berharga</h2>
+      <div class="sr"></div>
+      <p class="sd">Klik foto untuk melihat ukuran penuh. Gunakan filter untuk mencari momen tertentu.</p>
+    </div>
+  </div>
+
+  <div class="gal-filters rv" id="galFilters">
+    <button class="fb on" data-cat="all">Semua</button>
+    <button class="fb" data-cat="grade10">Grade 10</button>
+    <button class="fb" data-cat="ldks">LDKS</button>
+    <button class="fb" data-cat="aksi">Aksi Sosial</button>
+    <button class="fb" data-cat="momen">Momen</button>
+    <button class="fb" data-cat="haflah">Haflah</button>
+  </div>
+
+  <div class="gal-grid" id="galGrid"></div>
+</section>
+
+<!-- ═══════ FOOTER ═══════ -->
+<footer>
+  <div class="ft-in">
+    <img src="assets/logo.png" class="ft-logo" alt="Logo Pionera" onerror="this.style.display='none'"/>
+    <p class="ft-title">PIONERA GENERATION</p>
+    <p class="ft-sub">FIRST GEN 2025 · MA AL-FAKHRIYAH BATURAJA</p>
+    <div class="ft-rule"></div>
+    <a href="index.html" class="ft-btn">← Kembali ke Beranda</a>
+    <p class="ft-copy">© 2025 Pionera Generation · MA Al-Fakhriyah Baturaja</p>
+  </div>
+</footer>
+
+<!-- ═══════ LIGHTBOX ═══════ -->
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Lightbox foto">
+  <button class="lb-close" id="lbClose" aria-label="Tutup lightbox">
+    <svg width="14" height="14" viewBox="0 0 14 14"><line x1="1" y1="1" x2="13" y2="13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="13" y1="1" x2="1" y2="13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+  </button>
+  <button class="lb-nav lb-prev" id="lbPrev" aria-label="Foto sebelumnya">
+    <svg width="14" height="14" viewBox="0 0 14 14"><polyline points="9,1 4,7 9,13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <img id="lbImg" src="" alt="" style="transition:opacity .16s"/>
+  <button class="lb-nav lb-next" id="lbNext" aria-label="Foto berikutnya">
+    <svg width="14" height="14" viewBox="0 0 14 14"><polyline points="5,1 10,7 5,13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <div class="lb-info">
+    <span class="lb-lbl" id="lbLbl"></span>
+    <span class="lb-cnt" id="lbCnt"></span>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
