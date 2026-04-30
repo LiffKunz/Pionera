@@ -132,8 +132,9 @@ button, a, [role="button"],
 
 /* Hamburger */
 .ham{
-  display:none;flex-direction:column;gap:5px;padding:.5rem;
-  position:relative;z-index:1;
+  display:none;flex-direction:column;gap:5px;padding:.55rem;
+  min-width:44px;min-height:44px;align-items:center;justify-content:center;
+  position:relative;z-index:1;border-radius:8px;
 }
 .ham span{display:block;width:22px;height:1.5px;background:var(--gold);border-radius:2px;transition:all var(--tr)}
 .ham.on span:nth-child(1){transform:translateY(6.5px) rotate(45deg)}
@@ -144,8 +145,9 @@ button, a, [role="button"],
 .mob-bg{
   display:none;position:fixed;inset:0;background:rgba(0,0,0,.72);
   z-index:498;opacity:0;transition:opacity .3s;
+  pointer-events:none;   /* ← CRITICAL FIX: invisible = untouchable */
 }
-.mob-bg.on{opacity:1}
+.mob-bg.on{opacity:1;pointer-events:auto;}
 .mob-drawer{
   display:none;position:fixed;top:0;right:-105%;width:min(280px,84vw);height:100dvh;
   background:#07182b;border-left:1px solid var(--border2);z-index:499;
@@ -154,8 +156,8 @@ button, a, [role="button"],
 }
 .mob-drawer.on{right:0}
 .mob-drawer a{
-  display:block;color:var(--muted);font-size:.88rem;padding:.7rem .85rem;
-  border-radius:var(--r);transition:all var(--tr);
+  display:flex;align-items:center;color:var(--muted);font-size:.88rem;padding:.85rem 1rem;
+  border-radius:var(--r);transition:all var(--tr);min-height:48px;
 }
 .mob-drawer a:active,.mob-drawer a:hover{color:var(--gold);background:var(--gd)}
 .mob-drawer .m-cta{
@@ -602,7 +604,7 @@ button, a, [role="button"],
 }
 .modal-bg.on .modal-box{transform:none}
 .m-close{
-  position:absolute;top:.9rem;right:.9rem;width:30px;height:30px;
+  position:absolute;top:.9rem;right:.9rem;width:40px;height:40px;
   background:var(--gd);border:1px solid var(--border);border-radius:50%;
   display:flex;align-items:center;justify-content:center;color:var(--muted);
   transition:all var(--tr);z-index:1;
@@ -701,7 +703,7 @@ footer{background:#030c18;border-top:1px solid var(--border2);padding:3.75rem 1.
   padding:1.75rem 1.25rem .75rem;max-width:860px;margin:0 auto;
 }
 .fb{
-  padding:.46rem 1.2rem;border:1px solid var(--border);border-radius:50px;
+  padding:.52rem 1.2rem;min-height:42px;border:1px solid var(--border);border-radius:50px;
   color:var(--muted);font-size:.74rem;background:transparent;
   transition:all var(--tr);
   -webkit-tap-highlight-color:rgba(212,168,67,.15);touch-action:manipulation;
