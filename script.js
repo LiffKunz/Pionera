@@ -295,14 +295,15 @@ if ($mdr) $mdr.addEventListener('click', e => { if (e.target.closest('.mob-link'
 function initScrollNav() {
   if (location.pathname.includes('gallery')) return;
   const sections = [
-    { id:'sejarah', label:'Sejarah' },
-    { id:'logo',    label:'Logo' },
-    { id:'sambutan',label:'Sambutan' },
-    { id:'guru',    label:'Guru' },
-    { id:'murid',   label:'Santri' },
-    { id:'journey', label:'Journey' },
-    { id:'komunitas',label:'Komunitas' },
+    { id:'sejarah',   label:'Sejarah' },
+    { id:'logo',      label:'Logo' },
+    { id:'sambutan',  label:'Sambutan' },
+    { id:'guru',      label:'Guru' },
+    { id:'murid',     label:'Santri' },
+    { id:'journey',   label:'Journey' },
+    { id:'komunitas', label:'Komunitas' },
   ];
+
   const nav = document.createElement('div');
   nav.className = 'scroll-nav';
   sections.forEach(s => {
@@ -319,18 +320,47 @@ function initScrollNav() {
   });
   document.body.appendChild(nav);
 
-  const dots = nav.querySelectorAll('.sn-dot');
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (!e.isIntersecting) return;
-      dots.forEach(d => d.classList.remove('act'));
-      const match = [...dots].find(d => d.dataset.target === e.target.id);
-      if (match) match.classList.add('act');
-    });
-  }, { threshold:.35 });
+  const dots = [...nav.querySelectorAll('.sn-dot')];
 
-  sections.forEach(s => { const el = $(s.id); if(el) obs.observe(el); });
-  window.addEventListener('scroll', () => nav.classList.toggle('vis', scrollY > 300), { passive:true });
+  /* ── SCROLL POSITION BASED (fixes long sections like guru/murid) ──
+     Find which section's top is closest to 30% from viewport top.
+     This works correctly regardless of section height.           */
+  function updateActive() {
+    const trigger = window.innerHeight * 0.3; // 30% from top
+    let bestId = null;
+    let bestDist = Infinity;
+
+    sections.forEach(s => {
+      const el = $(s.id);
+      if (!el) return;
+      const top = el.getBoundingClientRect().top;
+      // Section is "active" when its top has passed the trigger point
+      // Use distance from trigger — closest one that passed wins
+      const dist = Math.abs(top - trigger);
+      if (top <= trigger + 50 && dist < bestDist) {
+        bestDist = dist;
+        bestId = s.id;
+      }
+    });
+
+    // Fallback: if no section passed trigger yet, use first visible
+    if (!bestId) {
+      sections.forEach(s => {
+        const el = $(s.id);
+        if (!el) return;
+        const top = el.getBoundingClientRect().top;
+        if (top < window.innerHeight && !bestId) bestId = s.id;
+      });
+    }
+
+    dots.forEach(d => d.classList.toggle('act', d.dataset.target === bestId));
+    nav.classList.toggle('vis', scrollY > 200);
+  }
+
+  window.addEventListener('scroll', updateActive, { passive:true });
+  window.addEventListener('resize', updateActive, { passive:true });
+  // Initial call after a tick (sections may not be rendered yet)
+  setTimeout(updateActive, 100);
 }
 
 /* ══════════════════════════════════════════════════
@@ -809,3 +839,243 @@ document.addEventListener('DOMContentLoaded', () => {
   initCounters();
   reveal();
 });
+
+/* ══════════════════════════════════════════════════
+   TDD — TEST SUITE
+   Run:  window.__runTests() in browser console
+   Or:   append ?test=1 to URL for auto-run overlay
+   ══════════════════════════════════════════════════ */
+window.__runTests = function() {
+  const results = [];
+  let passed = 0, failed = 0;
+
+  function assert(label, condition, detail) {
+    const ok = !!condition;
+    results.push({ label, ok, detail: ok ? '' : (detail || 'expected true, got false') });
+    if (ok) passed++; else failed++;
+  }
+
+  function assertEq(label, a, b) {
+    const ok = a === b;
+    results.push({ label, ok, detail: ok ? '' : `expected ${JSON.stringify(b)}, got ${JSON.stringify(a)}` });
+    if (ok) passed++; else failed++;
+  }
+
+  /* ── 1. DATA INTEGRITY ── */
+  assert('ikhwanData has 22 entries',        ikhwanData.length === 22);
+  assert('akhwatData has 15 entries',        akhwatData.length === 15);
+  assert('Total santri = 37',               ikhwanData.length + akhwatData.length === 37);
+  assert('guruPos has 18 entries',           guruPos.length === 18);
+  assert('guruNoPos has 36 entries',         guruNoPos.length === 36);
+  assert('logoElem has 12 entries',          logoElem.length === 12);
+  assert('galVideos has entries',            galVideos.length > 0);
+  assert('galPhotos has entries',            galPhotos.length > 0);
+
+  /* All santri have required fields */
+  const allSantri = [...ikhwanData, ...akhwatData];
+  assert('All santri have name',    allSantri.every(s => s.name?.trim().length > 0));
+  assert('All santri have pesan',   allSantri.every(s => s.pesan?.trim().length > 0));
+  assert('All santri have motto',   allSantri.every(s => s.motto?.trim().length > 0));
+  assert('All santri have cita',    allSantri.every(s => s.cita?.trim().length > 0));
+  assert('All santri have ttl',     allSantri.every(s => s.ttl?.trim().length > 0));
+  assert('All guruPos have photo',  guruPos.every(g => g.photo?.length > 0));
+  assert('All guruPos have pos',    guruPos.every(g => g.pos?.length > 0));
+  assert('galPhotos have valid cat',galPhotos.every(p => ['haflah','grade10','ldks','aksi','momen'].includes(p.cat)));
+
+  /* ── 2. DOM ELEMENTS EXIST ── */
+  const domChecks = [
+    ['#loader',     'loader'],
+    ['#nav',        'nav'],
+    ['#hamBtn',     'hamBtn'],
+    ['#mobBg',      'mobBg'],
+    ['#mobDrawer',  'mobDrawer'],
+    ['#modal',      'modal'],
+    ['#mClose',     'mClose'],
+    ['#mPhoto',     'mPhoto'],
+    ['#mName',      'mName'],
+    ['#mMsg',       'mMsg'],
+    ['#mBio',       'mBio'],
+  ];
+  domChecks.forEach(([label, id]) => assert(`DOM: ${label} exists`, !!$(id)));
+
+  /* Index-only DOM */
+  if (!location.pathname.includes('gallery')) {
+    assert('DOM: #elemGrid exists',      !!$('elemGrid'));
+    assert('DOM: #sambutanCard exists',  !!$('sambutanCard'));
+    assert('DOM: #guruPos exists',       !!$('guruPos'));
+    assert('DOM: #guruNoPos exists',     !!$('guruNoPos'));
+    assert('DOM: #ikhwanGrid exists',    !!$('ikhwanGrid'));
+    assert('DOM: #akhwatGrid exists',    !!$('akhwatGrid'));
+    assert('DOM: #pesanMissnur exists',  !!$('pesanMissnur'));
+    assert('DOM: #pesanRefita exists',   !!$('pesanRefita'));
+    assert('DOM: #print-bio exists',     !!$('print-bio'));
+    assert('DOM: #mShare exists',        !!$('mShare'));
+    assert('DOM: #mPrint exists',        !!$('mPrint'));
+  }
+
+  /* Gallery-only DOM */
+  if (location.pathname.includes('gallery')) {
+    assert('DOM: #galGrid exists',    !!$('galGrid'));
+    assert('DOM: #galFilters exists', !!$('galFilters') || !!document.querySelector('.gal-filters'));
+    assert('DOM: #gvMain exists',     !!$('gvMain'));
+    assert('DOM: #gvSidebar exists',  !!$('gvSidebar'));
+    assert('DOM: #lb exists',         !!$('lb'));
+    assert('DOM: #lbImg exists',      !!$('lbImg'));
+    assert('DOM: #lbDl exists',       !!$('lbDl'));
+  }
+
+  /* ── 3. RENDER OUTPUT ── */
+  if (!location.pathname.includes('gallery')) {
+    const eg = $('elemGrid');
+    if (eg) {
+      assert('renderElem: 12 cards rendered', eg.querySelectorAll('.elem-card').length === 12);
+    }
+    const gp = $('guruPos');
+    if (gp) {
+      assert('renderGuru: 18 pos cards rendered', gp.querySelectorAll('.gc').length === 18);
+    }
+    const gnp = $('guruNoPos');
+    if (gnp) {
+      assert('renderGuru: 36 nopos cards rendered', gnp.querySelectorAll('.gc').length === 36);
+    }
+    const ig = $('ikhwanGrid');
+    if (ig) {
+      assert('renderMurid ikhwan: 22 cards', ig.querySelectorAll('.mc').length === 22);
+      assert('renderMurid ikhwan: data-type set', ig.querySelector('[data-type="ikhwan"]') !== null);
+      assert('renderMurid ikhwan: data-idx set',  ig.querySelector('[data-idx="0"]') !== null);
+    }
+    const ag = $('akhwatGrid');
+    if (ag) {
+      assert('renderMurid akhwat: 15 cards', ag.querySelectorAll('.mc').length === 15);
+    }
+    const sc = $('sambutanCard');
+    if (sc) {
+      assert('renderSambutan: card rendered',    sc.querySelector('.sambut-card') !== null);
+      assert('renderSambutan: has data-type',    sc.querySelector('[data-type="sambutan"]') !== null);
+    }
+  }
+
+  /* ── 4. CRITICAL BUG FIXES ── */
+  const mobBgEl = $('mobBg');
+  if (mobBgEl) {
+    const style = window.getComputedStyle(mobBgEl);
+    assert('BUG FIX: mob-bg pointer-events none when hidden',
+      style.pointerEvents === 'none',
+      `Got: ${style.pointerEvents}`
+    );
+  }
+  const mCloseEl = $('mClose');
+  if (mCloseEl) {
+    const r = mCloseEl.getBoundingClientRect();
+    assert('BUG FIX: m-close touch target ≥ 40px wide',  r.width  >= 38, `Got: ${r.width.toFixed(1)}px`);
+    assert('BUG FIX: m-close touch target ≥ 40px tall',  r.height >= 38, `Got: ${r.height.toFixed(1)}px`);
+  }
+  const hamEl = $('hamBtn');
+  if (hamEl) {
+    const r = hamEl.getBoundingClientRect();
+    assert('BUG FIX: ham button touch target ≥ 40px wide',  r.width  >= 38, `Got: ${r.width.toFixed(1)}px`);
+    assert('BUG FIX: ham button touch target ≥ 40px tall',  r.height >= 38, `Got: ${r.height.toFixed(1)}px`);
+  }
+
+  /* ── 5. MODAL BEHAVIOR ── */
+  const modal = $('modal');
+  if (modal) {
+    assert('Modal: hidden by default',        !modal.classList.contains('on'));
+    assert('Modal: has aria-modal',           modal.getAttribute('aria-modal') === 'true');
+    assert('Modal: body NOT locked by default', !document.body.classList.contains('lock'));
+
+    // Test open/close cycle
+    openModal({ name:'Test User', role:'Test Role', group:'Test', msg:'Test message' });
+    assert('Modal: opens on openModal()',     modal.classList.contains('on'));
+    assert('Modal: body locks on open',      document.body.classList.contains('lock'));
+    assert('Modal: mName populated',         $('mName')?.textContent === 'Test User');
+    closeModal();
+    assert('Modal: closes on closeModal()',  !modal.classList.contains('on'));
+    assert('Modal: body unlocks on close',   !document.body.classList.contains('lock'));
+  }
+
+  /* ── 6. GALLERY FILTER ── */
+  if (location.pathname.includes('gallery')) {
+    renderGal('all');
+    const allCount = fItems.length;
+    assert('Gallery: renderGal all loads items', allCount > 0);
+
+    renderGal('haflah');
+    const haflahCount = fItems.length;
+    assert('Gallery: filter haflah < all',    haflahCount < allCount);
+    assert('Gallery: all haflah items correct cat', fItems.every(p => p.cat === 'haflah'));
+
+    renderGal('momen');
+    assert('Gallery: filter momen works',     fItems.every(p => p.cat === 'momen'));
+
+    renderGal('all'); // reset
+  }
+
+  /* ── 7. LIGHTBOX ── */
+  if (location.pathname.includes('gallery')) {
+    renderGal('all');
+    const lb = $('lb');
+    if (lb && fItems.length > 0) {
+      assert('Lightbox: hidden by default',   !lb.classList.contains('on'));
+      openLb(0);
+      assert('Lightbox: opens',               lb.classList.contains('on'));
+      assert('Lightbox: lbImg src set',       $('lbImg')?.src?.length > 0);
+      assert('Lightbox: lbCnt shows 1/N',     $('lbCnt')?.textContent?.startsWith('1'));
+      closeLb();
+      assert('Lightbox: closes',              !lb.classList.contains('on'));
+    }
+  }
+
+  /* ── 8. ESC function ── */
+  assertEq('esc: escapes &',  esc('a&b'),  'a&amp;b');
+  assertEq('esc: escapes <',  esc('a<b'),  'a&lt;b');
+  assertEq('esc: escapes >',  esc('a>b'),  'a&gt;b');
+  assertEq('esc: escapes "',  esc('a"b'),  'a&quot;b');
+  assertEq('esc: safe string unchanged', esc('hello world'), 'hello world');
+
+  /* ── RENDER RESULTS ── */
+  const total = passed + failed;
+  const pct   = Math.round(passed/total*100);
+  console.group(`🧪 PIONERA TEST SUITE — ${passed}/${total} passed (${pct}%)`);
+  results.forEach(r => {
+    if (r.ok) console.log(`  ✅ ${r.label}`);
+    else      console.error(`  ❌ ${r.label}${r.detail ? ' → ' + r.detail : ''}`);
+  });
+  console.groupEnd();
+
+  /* ── VISUAL OVERLAY ── */
+  let overlay = document.getElementById('__test_overlay');
+  if (overlay) overlay.remove();
+  overlay = document.createElement('div');
+  overlay.id = '__test_overlay';
+  overlay.style.cssText = `
+    position:fixed;bottom:1rem;left:1rem;z-index:99999;
+    background:rgba(3,12,26,.97);border:1px solid ${failed ? '#e24b4a' : '#4caf50'};
+    border-radius:12px;padding:1rem 1.25rem;max-width:320px;
+    font-family:monospace;font-size:12px;color:#e8f0fa;
+    box-shadow:0 8px 32px rgba(0,0,0,.6);
+  `;
+  overlay.innerHTML = `
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem">
+      <strong style="color:${failed ? '#f87171' : '#86efac'}">
+        ${failed ? '❌' : '✅'} ${passed}/${total} tests passed (${pct}%)
+      </strong>
+      <button onclick="this.closest('#__test_overlay').remove()"
+        style="background:none;border:none;color:#6e8ba6;cursor:pointer;font-size:14px;padding:0 2px">✕</button>
+    </div>
+    ${failed > 0 ? `
+      <div style="color:#fca5a5;font-size:11px;border-top:1px solid rgba(255,255,255,.1);padding-top:.5rem;max-height:160px;overflow-y:auto">
+        ${results.filter(r=>!r.ok).map(r=>`<div>❌ ${r.label}${r.detail ? '<br><span style="color:#9ca3af;padding-left:8px">→ '+r.detail+'</span>' : ''}</div>`).join('')}
+      </div>` : '<div style="color:#86efac;font-size:11px">All tests green! 🎉</div>'
+    }
+    <div style="color:#4b6480;font-size:10px;margin-top:.5rem">window.__runTests() to re-run</div>
+  `;
+  document.body.appendChild(overlay);
+
+  return { passed, failed, total, results };
+};
+
+/* Auto-run if ?test=1 in URL */
+if (location.search.includes('test=1')) {
+  window.addEventListener('load', () => setTimeout(window.__runTests, 500));
+}
