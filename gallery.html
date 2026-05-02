@@ -3,7 +3,14 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Galeri – PIONERA GENERATION 2025 | MA Al-Fakhriyah</title>
+<title>Galeri – PIONERA GENERATION 2025 | MA Al-Fakhriyah Baturaja</title>
+<meta name="description" content="Galeri foto dan video kenangan PIONERA GENERATION 2025 — MA Al-Fakhriyah Baturaja."/>
+<meta property="og:title"       content="Galeri PIONERA GENERATION 2025"/>
+<meta property="og:description" content="Foto dan video kenangan angkatan pertama MA Al-Fakhriyah Baturaja."/>
+<meta property="og:image"       content="https://liffkunz.github.io/Pionera/assets/logo.png"/>
+<meta property="og:url"         content="https://liffkunz.github.io/Pionera/gallery.html"/>
+<link rel="icon" type="image/png" href="assets/logo.png"/>
+<link rel="apple-touch-icon"    href="assets/logo.png"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet"/>
@@ -28,26 +35,31 @@
     <span></span><span></span><span></span>
   </button>
 </nav>
+
 <div class="mob-bg" id="mobBg"></div>
 <nav class="mob-drawer" id="mobDrawer">
-  <a href="index.html"        class="mob-link">← Beranda</a>
-  <a href="index.html#guru"   class="mob-link">Para Guru</a>
-  <a href="index.html#murid"  class="mob-link">Santri</a>
-  <a href="#video"            class="mob-link">Video Kenangan</a>
-  <a href="#galeri"           class="mob-link">Galeri Foto</a>
+  <div class="mob-dhead">
+    <img src="assets/logo.png" alt="Pionera" onerror="this.style.display='none'"/>
+    <div><div class="mob-dhead-txt">PIONERA</div><div class="mob-dhead-sub">FIRST GEN 2025</div></div>
+  </div>
+  <a href="index.html"       class="mob-link">← Beranda</a>
+  <a href="index.html#guru"  class="mob-link">👩‍🏫 Para Guru</a>
+  <a href="index.html#murid" class="mob-link">🎓 Santri</a>
+  <a href="#video"           class="mob-link">🎬 Video Kenangan</a>
+  <a href="#galeri"          class="mob-link">🖼 Galeri Foto</a>
 </nav>
 
 <!-- ═══════ HERO ═══════ -->
 <div class="gal-hero">
   <div class="gal-hero-in">
     <span class="st">Kenangan Visual</span>
-    <h1 style="font-family:'Playfair Display',serif;font-size:clamp(2.2rem,7vw,4rem);color:#e8f0fa;line-height:1.2;margin-bottom:.5rem">Galeri Kenangan</h1>
+    <h1>Galeri Kenangan</h1>
     <div class="sr"></div>
     <p class="sd" style="margin:0 auto">Setiap foto dan video menyimpan cerita, tawa, air mata, dan kenangan yang tak akan pernah tergantikan. 2022–2025.</p>
   </div>
 </div>
 
-<!-- ═══════ VIDEO SECTION ═══════ -->
+<!-- ═══════ VIDEO ═══════ -->
 <section id="video" class="sec sec-alt">
   <div class="inn">
     <div class="sh rv">
@@ -72,19 +84,17 @@
       <span class="st">Galeri Foto</span>
       <h2>Momen Berharga</h2>
       <div class="sr"></div>
-      <p class="sd">Klik foto untuk melihat ukuran penuh. Gunakan filter untuk mencari momen tertentu.</p>
+      <p class="sd">Klik foto untuk melihat ukuran penuh. Tap ikon ↓ untuk simpan foto kenangan.</p>
     </div>
   </div>
-
   <div class="gal-filters rv" id="galFilters">
-    <button class="fb on" data-cat="all">Semua</button>
-    <button class="fb" data-cat="grade10">Grade 10</button>
-    <button class="fb" data-cat="ldks">LDKS</button>
-    <button class="fb" data-cat="aksi">Aksi Sosial</button>
-    <button class="fb" data-cat="momen">Momen</button>
-    <button class="fb" data-cat="haflah">Haflah</button>
+    <button class="fb on" data-cat="all"     type="button">Semua</button>
+    <button class="fb"    data-cat="grade10" type="button">Grade 10</button>
+    <button class="fb"    data-cat="ldks"    type="button">LDKS</button>
+    <button class="fb"    data-cat="aksi"    type="button">Aksi Sosial</button>
+    <button class="fb"    data-cat="momen"   type="button">Momen</button>
+    <button class="fb"    data-cat="haflah"  type="button">Haflah</button>
   </div>
-
   <div class="gal-grid" id="galGrid"></div>
 </section>
 
@@ -102,14 +112,21 @@
 
 <!-- ═══════ LIGHTBOX ═══════ -->
 <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Lightbox foto">
-  <button class="lb-close" id="lbClose" aria-label="Tutup lightbox">
+  <button class="lb-close" id="lbClose" aria-label="Tutup" type="button">
     <svg width="14" height="14" viewBox="0 0 14 14"><line x1="1" y1="1" x2="13" y2="13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><line x1="13" y1="1" x2="1" y2="13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
   </button>
-  <button class="lb-nav lb-prev" id="lbPrev" aria-label="Foto sebelumnya">
+  <a class="lb-dl" id="lbDl" href="#" download aria-label="Download foto" title="Download foto">
+    <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+      <line x1="7.5" y1="1" x2="7.5" y2="10.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <polyline points="3.5,7 7.5,11.5 11.5,7" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="1" y1="14" x2="14" y2="14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+  </a>
+  <button class="lb-nav lb-prev" id="lbPrev" aria-label="Sebelumnya" type="button">
     <svg width="14" height="14" viewBox="0 0 14 14"><polyline points="9,1 4,7 9,13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </button>
-  <img id="lbImg" src="" alt="" style="transition:opacity .16s"/>
-  <button class="lb-nav lb-next" id="lbNext" aria-label="Foto berikutnya">
+  <img id="lbImg" src="" alt=""/>
+  <button class="lb-nav lb-next" id="lbNext" aria-label="Berikutnya" type="button">
     <svg width="14" height="14" viewBox="0 0 14 14"><polyline points="5,1 10,7 5,13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
   </button>
   <div class="lb-info">
