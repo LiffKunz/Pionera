@@ -738,35 +738,10 @@ footer{background:#020810;border-top:1px solid var(--border2);padding:3.75rem 1.
   .guru-grid-pos,.guru-grid-nopos{grid-template-columns:repeat(3,1fr);gap:.55rem}
   .m-grid{grid-template-columns:repeat(3,1fr);gap:.65rem}
   .tl-axis{display:none}
-  /* Mobile timeline: clean left-rail vertical layout */
-  .tl-item{
-    display:grid;
-    grid-template-columns:28px 1fr;
-    grid-template-rows:auto;
-    gap:0 1rem;
-    margin-bottom:1.75rem;
-    align-items:start;
-  }
-  .tl-dot{
-    grid-column:1;grid-row:1;
-    width:12px;height:12px;
-    margin:4px auto 0;
-    position:relative;left:auto;
-    display:block;flex-shrink:0;
-  }
+  .tl-item{display:block;padding-left:1.4rem;border-left:1px solid rgba(212,168,67,.35);margin-bottom:1.6rem}
+  .tl-dot{position:relative;left:-8px;margin-bottom:.45rem;display:block}
   .tl-void{display:none}
-  /* Both odd and even cards go in column 2 on mobile */
-  .tl-item .tl-card{
-    grid-column:2;grid-row:1;
-    text-align:left!important;
-  }
-  /* Left rail line connecting dots */
-  .tl-wrap::before{
-    content:'';
-    position:absolute;
-    left:14px;top:8px;bottom:8px;width:1px;
-    background:linear-gradient(to bottom,transparent,rgba(212,168,67,.4) 5%,rgba(212,168,67,.4) 95%,transparent);
-  }
+  .tl-card{text-align:left!important}
   .kom-grid{grid-template-columns:1fr}
   .elem-grid{grid-template-columns:repeat(2,1fr)}
   .gvid-card{grid-template-columns:1fr}
