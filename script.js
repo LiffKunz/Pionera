@@ -1061,19 +1061,31 @@ window.__runTests = function() {
   }
 
   /* ── 4. CRITICAL BUG FIXES ── */
+  /* ── 4. CRITICAL BUG FIXES ── */
   const mobBgEl = $('mobBg');
   if (mobBgEl) {
+    // Check the CSS rule directly — not computed style (which gives 'none' when display:none at desktop)
+    // Real test: does the element have pointer-events:none in its stylesheet rule?
+    // We do this by temporarily making it visible and checking computed style
+    const origDisplay = mobBgEl.style.display;
+    mobBgEl.style.setProperty('display', 'block', 'important');
     const style = window.getComputedStyle(mobBgEl);
-    assert('BUG FIX: mob-bg pointer-events none when hidden',
-      style.pointerEvents === 'none',
-      `Got: ${style.pointerEvents}`
+    const pe = style.pointerEvents;
+    mobBgEl.style.display = origDisplay;
+    assert('BUG FIX: mob-bg pointer-events none when visible (mobile simulation)',
+      pe === 'none',
+      `Got: ${pe} — means mob-bg will block taps on mobile when opacity:0`
     );
   }
   const mCloseEl = $('mClose');
   if (mCloseEl) {
+    // Open modal first so m-close is visible and has layout
+    const wasOpen = $('modal')?.classList.contains('on');
+    if (!wasOpen) openModal({ name:'Test', role:'Test', group:'', msg:'test' });
     const r = mCloseEl.getBoundingClientRect();
     assert('BUG FIX: m-close touch target ≥ 40px wide',  r.width  >= 38, `Got: ${r.width.toFixed(1)}px`);
     assert('BUG FIX: m-close touch target ≥ 40px tall',  r.height >= 38, `Got: ${r.height.toFixed(1)}px`);
+    if (!wasOpen) closeModal();
   }
   const hamEl = $('hamBtn');
   if (hamEl) {
