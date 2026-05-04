@@ -6,7 +6,7 @@
 <title>PIONERA GENERATION – First Gen 2025 | MA Al-Fakhriyah Baturaja</title>
 <meta name="description" content="Buku Kenangan Digital Angkatan Pertama MA Al-Fakhriyah Baturaja — PIONERA GENERATION First Gen 2025."/>
 <meta property="og:title"       content="PIONERA GENERATION 2025 – MA Al-Fakhriyah Baturaja"/>
-<meta property="og:description" content="Buku Kenangan Digital Angkatan Pertama MA Al-Fakhriyah Baturaja. 37 santri, satu sejarah."/>
+<meta property="og:description" content="Buku Kenangan Digital Angkatan Pertama. 37 santri, satu sejarah."/>
 <meta property="og:image"       content="https://liffkunz.github.io/Pionera/assets/logo.png"/>
 <meta property="og:url"         content="https://liffkunz.github.io/Pionera/"/>
 <meta property="og:type"        content="website"/>
@@ -23,7 +23,7 @@
 </head>
 <body class="lock">
 
-<!-- ═══════ LOADER ═══════ -->
+<!-- LOADER -->
 <div id="loader">
   <div class="ld-orbit">
     <div class="ld-r1"></div><div class="ld-r2"></div>
@@ -39,7 +39,7 @@
   <div class="ld-track"><div class="ld-fill"></div></div>
 </div>
 
-<!-- ═══════ NAVBAR ═══════ -->
+<!-- NAVBAR -->
 <nav id="nav">
   <a href="index.html" class="nl">
     <img src="assets/logo.png" alt="Pionera" onerror="this.style.display='none'"/>
@@ -59,7 +59,7 @@
   </button>
 </nav>
 
-<!-- CRITICAL BUG FIX: pointer-events:none when hidden -->
+<!-- CRITICAL BUG FIX: pointer-events:none by default -->
 <div class="mob-bg" id="mobBg"></div>
 <nav class="mob-drawer" id="mobDrawer">
   <div class="mob-dhead">
@@ -76,17 +76,15 @@
   <a href="gallery.html" class="m-cta mob-link">🖼 Galeri Foto &amp; Video</a>
 </nav>
 
-<!-- ═══════ HERO ═══════ -->
+<!-- HERO -->
 <section id="hero">
   <canvas id="hcvs"></canvas>
   <div class="hveil"></div>
   <div class="hc">
-    <!-- Parallax layer 1: logo -->
     <div class="hc-logo-wrap">
       <img src="assets/logo.png" alt="Logo Pionera" class="h-logo"
            onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 80 80%22><circle cx=%2240%22 cy=%2240%22 r=%2238%22 fill=%22%230d2240%22 stroke=%22%23d4a843%22 stroke-width=%221.5%22/><text x=%2240%22 y=%2247%22 text-anchor=%22middle%22 fill=%22%23d4a843%22 font-size=%2224%22 font-family=%22serif%22>P</text></svg>'"/>
     </div>
-    <!-- Parallax layer 2: text -->
     <div class="hc-text-wrap">
       <p class="h-eye">MA Al-Fakhriyah Baturaja &nbsp;·&nbsp; OKU, Sumatera Selatan</p>
       <div class="h-orn">
@@ -109,14 +107,43 @@
   </div>
 </section>
 
-<!-- ═ DIVIDER ═ -->
-<div class="sec-divider">
-  <div class="sec-divider-line"></div>
-  <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 2l2.4 8.6H24l-6.2 4.5 2.4 8.6L14 19.2l-6.2 4.5 2.4-8.6L4 10.6h7.6z" stroke="#d4a843" stroke-width="1.2" fill="rgba(212,168,67,.08)"/></svg>
-  <div class="sec-divider-line r"></div>
+<!-- STATS ROW -->
+<div class="sec-div" style="margin-top:-.5rem">
+  <div class="sec-div-line"></div>
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 1l1.8 6.2H18l-5.4 3.9 2 6.2L10 13.4l-4.6 3.9 2-6.2L2 7.2h6.2z" stroke="#d4a843" stroke-width="1" fill="rgba(212,168,67,.08)"/></svg>
+  <div class="sec-div-line r"></div>
+</div>
+<div class="sec-compact" style="background:var(--bg2)">
+  <div class="inn">
+    <div class="stats-row rv">
+      <div class="stat-item">
+        <span class="stat-num" data-count="37">37</span>
+        <span class="stat-lbl">Santri Pionera</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" data-count="54">54</span>
+        <span class="stat-lbl">Guru &amp; Staff</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" data-count="3">3</span>
+        <span class="stat-lbl">Tahun Perjalanan</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" data-count="1">1</span>
+        <span class="stat-lbl">Sejarah Pertama</span>
+      </div>
+    </div>
+  </div>
 </div>
 
-<!-- ═══════ SEJARAH + VISI MISI ═══════ -->
+<!-- DIVIDER -->
+<div class="sec-div">
+  <div class="sec-div-line"></div>
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="2" width="16" height="16" rx="2" stroke="#d4a843" stroke-width="1" fill="rgba(212,168,67,.07)" transform="rotate(45 10 10)"/></svg>
+  <div class="sec-div-line r"></div>
+</div>
+
+<!-- SEJARAH -->
 <section id="sejarah" class="sec">
   <div class="inn">
     <div class="sh rv">
@@ -135,8 +162,8 @@
         <h3 class="sej-title">Pondok Pesantren Al-Fakhriyah</h3>
         <p class="sej-addr">Jl. H.M. Moeslimin RT.004 Dusun IV, Kel. Kemalaraja, Kec. Baturaja Timur, Kab. OKU, Sumatera Selatan</p>
         <p>Pondok Pesantren Al-Fakhriyah Baturaja adalah salah satu bentuk satuan pendidikan Pondok Pesantren yang menyelenggarakan pendidikan formal dengan program pendidikan umum dan pendidikan keagamaan Islam.</p>
-        <p>Pondok Pesantren Al-Fakhriyah Baturaja berdiri sejak Tahun 2018 di bawah naungan Yayasan Al-Fakhriyah Baturaja dan secara resmi mendapatkan Izin Operasional pada tahun 2020.</p>
-        <p>Dengan harapan para santri yang belajar di sini nantinya menjadi ummat yang mempunyai Ilmu Dasar Aqidah yang kuat, mampu memahami hukum syariat Islam, mencintai ilmu pengetahuan agama dan mampu mengamalkannya dengan baik.</p>
+        <p>Berdiri sejak Tahun 2018 di bawah naungan Yayasan Al-Fakhriyah Baturaja dan secara resmi mendapatkan Izin Operasional pada tahun 2020. Berdirinya pondok pesantren ini merupakan wujud panggilan jiwa dari pengasuh bersama pengurus yayasan yang memiliki komitmen tinggi dalam mendirikan pondok pesantren di dalam kota Baturaja.</p>
+        <p>Dengan harapan para santri yang belajar di sini nantinya menjadi ummat yang mempunyai Ilmu Dasar Aqidah yang kuat, mampu memahami hukum syariat Islam, mencintai ilmu pengetahuan agama dan mampu mengamalkannya dengan baik serta memiliki Iman dan Taqwa.</p>
       </div>
     </div>
     <div class="vm-grid">
@@ -166,14 +193,14 @@
   </div>
 </section>
 
-<!-- ═ DIVIDER ═ -->
-<div class="sec-divider">
-  <div class="sec-divider-line"></div>
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="2" stroke="#d4a843" stroke-width="1.2" fill="rgba(212,168,67,.07)" transform="rotate(45 12 12)"/></svg>
-  <div class="sec-divider-line r"></div>
+<!-- DIVIDER -->
+<div class="sec-div">
+  <div class="sec-div-line"></div>
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 1l1.8 6.2H18l-5.4 3.9 2 6.2L10 13.4l-4.6 3.9 2-6.2L2 7.2h6.2z" stroke="#d4a843" stroke-width="1" fill="rgba(212,168,67,.08)"/></svg>
+  <div class="sec-div-line r"></div>
 </div>
 
-<!-- ═══════ LOGO ANGKATAN ═══════ -->
+<!-- LOGO ANGKATAN -->
 <section id="logo" class="sec sec-alt">
   <div class="inn">
     <div class="sh rv">
@@ -191,14 +218,14 @@
   </div>
 </section>
 
-<!-- ═ DIVIDER ═ -->
-<div class="sec-divider">
-  <div class="sec-divider-line"></div>
-  <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 2l2.4 8.6H24l-6.2 4.5 2.4 8.6L14 19.2l-6.2 4.5 2.4-8.6L4 10.6h7.6z" stroke="#d4a843" stroke-width="1.2" fill="rgba(212,168,67,.08)"/></svg>
-  <div class="sec-divider-line r"></div>
+<!-- DIVIDER -->
+<div class="sec-div">
+  <div class="sec-div-line"></div>
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="2" width="16" height="16" rx="2" stroke="#d4a843" stroke-width="1" fill="rgba(212,168,67,.07)" transform="rotate(45 10 10)"/></svg>
+  <div class="sec-div-line r"></div>
 </div>
 
-<!-- ═══════ SAMBUTAN ═══════ -->
+<!-- SAMBUTAN -->
 <section id="sambutan" class="sec">
   <div class="inn">
     <div class="sh rv">
@@ -211,14 +238,14 @@
   </div>
 </section>
 
-<!-- ═ DIVIDER ═ -->
-<div class="sec-divider">
-  <div class="sec-divider-line"></div>
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="2" stroke="#d4a843" stroke-width="1.2" fill="rgba(212,168,67,.07)" transform="rotate(45 12 12)"/></svg>
-  <div class="sec-divider-line r"></div>
+<!-- DIVIDER -->
+<div class="sec-div">
+  <div class="sec-div-line"></div>
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 1l1.8 6.2H18l-5.4 3.9 2 6.2L10 13.4l-4.6 3.9 2-6.2L2 7.2h6.2z" stroke="#d4a843" stroke-width="1" fill="rgba(212,168,67,.08)"/></svg>
+  <div class="sec-div-line r"></div>
 </div>
 
-<!-- ═══════ VIDEO ═══════ -->
+<!-- VIDEO -->
 <section class="sec sec-alt">
   <div class="inn">
     <div class="sh rv">
@@ -231,14 +258,14 @@
   </div>
 </section>
 
-<!-- ═ DIVIDER ═ -->
-<div class="sec-divider">
-  <div class="sec-divider-line"></div>
-  <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 2l2.4 8.6H24l-6.2 4.5 2.4 8.6L14 19.2l-6.2 4.5 2.4-8.6L4 10.6h7.6z" stroke="#d4a843" stroke-width="1.2" fill="rgba(212,168,67,.08)"/></svg>
-  <div class="sec-divider-line r"></div>
+<!-- DIVIDER -->
+<div class="sec-div">
+  <div class="sec-div-line"></div>
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="2" width="16" height="16" rx="2" stroke="#d4a843" stroke-width="1" fill="rgba(212,168,67,.07)" transform="rotate(45 10 10)"/></svg>
+  <div class="sec-div-line r"></div>
 </div>
 
-<!-- ═══════ GURU ═══════ -->
+<!-- GURU -->
 <section id="guru" class="sec">
   <div class="inn">
     <div class="sh rv">
@@ -258,46 +285,37 @@
   </div>
 </section>
 
-<!-- ═ DIVIDER ═ -->
-<div class="sec-divider">
-  <div class="sec-divider-line"></div>
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="2" stroke="#d4a843" stroke-width="1.2" fill="rgba(212,168,67,.07)" transform="rotate(45 12 12)"/></svg>
-  <div class="sec-divider-line r"></div>
+<!-- DIVIDER -->
+<div class="sec-div">
+  <div class="sec-div-line"></div>
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 1l1.8 6.2H18l-5.4 3.9 2 6.2L10 13.4l-4.6 3.9 2-6.2L2 7.2h6.2z" stroke="#d4a843" stroke-width="1" fill="rgba(212,168,67,.08)"/></svg>
+  <div class="sec-div-line r"></div>
 </div>
 
-<!-- ═══════ SANTRI ═══════ -->
+<!-- SANTRI -->
 <div id="murid" class="sec sec-alt">
   <div class="inn">
     <div class="sh rv">
       <span class="st">Student Profile</span>
       <h2>Santri Pionera</h2>
       <div class="sr"></div>
-      <p class="sd">37 jiwa yang bersama menorehkan jejak pertama di MA Al-Fakhriyah Baturaja. Klik kartu untuk melihat biodata lengkap.</p>
+      <p class="sd">37 jiwa yang bersama menorehkan jejak pertama di MA Al-Fakhriyah. Klik kartu untuk biodata lengkap — geser di dalam modal untuk browse semua santri.</p>
     </div>
-
-    <!-- Pesan Miss Nur -->
     <div id="pesanMissnur" style="margin-bottom:2.25rem"></div>
-
-    <!-- Ikhwan -->
     <div class="murid-head rv">
       <div class="murid-title-wrap">
         <span class="kelas-badge">XII IPA 1</span>
-        <h2 style="font-family:'Playfair Display',serif">Ikhwan Pionera</h2>
+        <h2 style="font-family:'Playfair Display',serif;font-size:1.25rem">Ikhwan Pionera</h2>
       </div>
       <div class="murid-count">Jumlah<strong data-count="22">22</strong>Santri</div>
     </div>
     <div class="m-grid" id="ikhwanGrid"></div>
-
     <div style="height:3rem"></div>
-
-    <!-- Pesan Ustadzah Refita -->
     <div id="pesanRefita" style="margin-bottom:2.25rem"></div>
-
-    <!-- Akhwat -->
     <div class="murid-head rv">
       <div class="murid-title-wrap">
         <span class="kelas-badge">XII IPA 2</span>
-        <h2 style="font-family:'Playfair Display',serif">Akhwat Pionera</h2>
+        <h2 style="font-family:'Playfair Display',serif;font-size:1.25rem">Akhwat Pionera</h2>
       </div>
       <div class="murid-count">Jumlah<strong data-count="15">15</strong>Santri</div>
     </div>
@@ -305,14 +323,14 @@
   </div>
 </div>
 
-<!-- ═ DIVIDER ═ -->
-<div class="sec-divider">
-  <div class="sec-divider-line"></div>
-  <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 2l2.4 8.6H24l-6.2 4.5 2.4 8.6L14 19.2l-6.2 4.5 2.4-8.6L4 10.6h7.6z" stroke="#d4a843" stroke-width="1.2" fill="rgba(212,168,67,.08)"/></svg>
-  <div class="sec-divider-line r"></div>
+<!-- DIVIDER -->
+<div class="sec-div">
+  <div class="sec-div-line"></div>
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="2" width="16" height="16" rx="2" stroke="#d4a843" stroke-width="1" fill="rgba(212,168,67,.07)" transform="rotate(45 10 10)"/></svg>
+  <div class="sec-div-line r"></div>
 </div>
 
-<!-- ═══════ JOURNEY ═══════ -->
+<!-- OUR JOURNEY -->
 <section id="journey" class="sec">
   <div class="inn-sm">
     <div class="sh rv">
@@ -359,14 +377,14 @@
   </div>
 </section>
 
-<!-- ═ DIVIDER ═ -->
-<div class="sec-divider">
-  <div class="sec-divider-line"></div>
-  <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="2" stroke="#d4a843" stroke-width="1.2" fill="rgba(212,168,67,.07)" transform="rotate(45 12 12)"/></svg>
-  <div class="sec-divider-line r"></div>
+<!-- DIVIDER -->
+<div class="sec-div">
+  <div class="sec-div-line"></div>
+  <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 1l1.8 6.2H18l-5.4 3.9 2 6.2L10 13.4l-4.6 3.9 2-6.2L2 7.2h6.2z" stroke="#d4a843" stroke-width="1" fill="rgba(212,168,67,.08)"/></svg>
+  <div class="sec-div-line r"></div>
 </div>
 
-<!-- ═══════ KOMUNITAS ═══════ -->
+<!-- KOMUNITAS -->
 <section id="komunitas" class="sec sec-alt">
   <div class="inn">
     <div class="sh rv">
@@ -416,7 +434,7 @@
   </div>
 </section>
 
-<!-- ═══════ FOOTER ═══════ -->
+<!-- FOOTER -->
 <footer>
   <div class="ft-in">
     <img src="assets/logo.png" class="ft-logo" alt="Logo Pionera" onerror="this.style.display='none'"/>
@@ -429,28 +447,38 @@
   </div>
 </footer>
 
-<!-- ═══════ MODAL ═══════ -->
+<!-- MODAL -->
 <div class="modal-bg" id="modal" role="dialog" aria-modal="true" aria-labelledby="mName">
   <div class="modal-box">
-    <button class="m-close" id="mClose" aria-label="Tutup" type="button">
+    <button class="m-close" id="mClose" aria-label="Tutup modal" type="button">
       <svg width="12" height="12" viewBox="0 0 12 12"><line x1="1" y1="1" x2="11" y2="11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><line x1="11" y1="1" x2="1" y2="11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
     </button>
-    <img id="mPhoto" src="" alt="" class="m-photo"/>
-    <h3 id="mName" class="m-name"></h3>
-    <p  id="mRole" class="m-role"></p>
-    <p  id="mGroup" class="m-group"></p>
+    <img  id="mPhoto" src="" alt="" class="m-photo"/>
+    <h3  id="mName"  class="m-name"></h3>
+    <p   id="mRole"  class="m-role"></p>
+    <p   id="mGroup" class="m-group"></p>
     <div class="m-rule"></div>
-    <p  id="mMsg" class="m-msg"></p>
-    <div id="mBio" class="m-bio" style="display:none"></div>
+    <p   id="mMsg"   class="m-msg"></p>
+    <div id="mBio"   class="m-bio" style="display:none"></div>
     <div class="m-actions">
       <button class="m-share" id="mShare" type="button">↗ Bagikan</button>
       <button class="m-print" id="mPrint" type="button">⎙ Cetak PDF</button>
     </div>
+    <!-- Swipe nav between santri -->
+    <div class="m-nav" id="mNavBar" style="display:none">
+      <button class="m-nav-btn m-nav-prev" type="button" aria-label="Santri sebelumnya">
+        <svg width="14" height="14" viewBox="0 0 14 14"><polyline points="9,1 4,7 9,13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <span class="m-nav-counter">1 / 22</span>
+      <button class="m-nav-btn m-nav-next" type="button" aria-label="Santri berikutnya">
+        <svg width="14" height="14" viewBox="0 0 14 14"><polyline points="5,1 10,7 5,13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
   </div>
 </div>
 
-<!-- Print PDF container (hidden, revealed by JS before print) -->
-<div id="print-bio"></div>
+<!-- Print PDF target -->
+<div id="print-bio" style="display:none"></div>
 
 <script src="script.js"></script>
 </body>
