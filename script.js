@@ -245,6 +245,24 @@ const ICONS = {
 };
 
 /* ══════════════════════════════════════════════════
+   TOAST + SCROLL RESTORE
+   ══════════════════════════════════════════════════ */
+let _toastEl = null;
+function showToast(msg, dur=2200) {
+  if (!_toastEl) {
+    _toastEl = document.createElement('div');
+    _toastEl.className = 'toast';
+    document.body.appendChild(_toastEl);
+  }
+  _toastEl.textContent = msg;
+  _toastEl.classList.add('show');
+  clearTimeout(_toastEl._t);
+  _toastEl._t = setTimeout(() => _toastEl.classList.remove('show'), dur);
+}
+let _savedScroll = 0;
+let _currentModalList = null, _currentModalIdx = -1;
+
+/* ══════════════════════════════════════════════════
    LOADER — 2 seconds
    ══════════════════════════════════════════════════ */
 window.addEventListener('load', () => {
@@ -479,6 +497,7 @@ let currentModalData = null;
 function openModal(d) {
   if (!$modal) return;
   currentModalData = d;
+  _savedScroll = window.scrollY;
   $mPhoto.src = d.photo || '';
   $mPhoto.onerror = () => { $mPhoto.src = av(d.name); };
   $mName.textContent  = d.name  || '';
@@ -501,29 +520,68 @@ function openModal(d) {
     $mBio.innerHTML = rows.join('');
     $mBio.style.display = rows.length ? 'block' : 'none';
   }
+  _updateModalNav();
   $modal.classList.add('on');
   document.body.classList.add('lock');
+  document.body.style.top = `-${_savedScroll}px`;
 }
 
-function closeModal() { $modal?.classList.remove('on'); document.body.classList.remove('lock'); currentModalData = null; }
+function closeModal() {
+  $modal?.classList.remove('on');
+  document.body.classList.remove('lock');
+  document.body.style.top = '';
+  window.scrollTo({ top: _savedScroll, behavior: 'instant' });
+  currentModalData = null;
+}
+
+function _updateModalNav() {
+  const nb = document.getElementById('mNavBar'); if (!nb) return;
+  if (!_currentModalList || _currentModalList.length <= 1) { nb.style.display='none'; return; }
+  nb.style.display = 'flex';
+  const prev = nb.querySelector('.m-nav-prev');
+  const next = nb.querySelector('.m-nav-next');
+  const ctr  = nb.querySelector('.m-nav-counter');
+  if (prev) prev.disabled = _currentModalIdx <= 0;
+  if (next) next.disabled = _currentModalIdx >= _currentModalList.length - 1;
+  if (ctr)  ctr.textContent = `${_currentModalIdx+1} / ${_currentModalList.length}`;
+}
+
+function _openSantriAt(idx) {
+  if (!_currentModalList || idx < 0 || idx >= _currentModalList.length) return;
+  _currentModalIdx = idx;
+  const s    = _currentModalList[idx];
+  const slug = s.name.toLowerCase().replace(/[^a-z\s]/g,'').trim().replace(/\s+/g,'-');
+  openModal({ photo:`assets/siswa/${slug}.jpg`, name:s.name, role:'Santri Pionera',
+    group:_currentModalList._kelas, msg:s.pesan, ttl:s.ttl, ig:s.ig,
+    cita:s.cita, kesan:s.kesan, motto:s.motto, pesan:s.pesan });
+  _updateModalNav();
+}
 if ($mClose) $mClose.addEventListener('click', closeModal);
 if ($modal)  $modal.addEventListener('click', e => { if(e.target===$modal) closeModal(); });
 
 /* ── Share button (Feature B) ── */
 const $mShare = $('mShare');
 if ($mShare) $mShare.addEventListener('click', () => {
-  const d = currentModalData;
-  if (!d) return;
-  const text = `✨ ${d.name}\n🎯 Cita-cita: ${d.cita||'-'}\n💬 "${d.motto||d.msg||''}"\n\n— PIONERA Generation 2025 | MA Al-Fakhriyah Baturaja`;
+  const d = currentModalData; if (!d) return;
+  const text = `✨ ${d.name}\n🎯 Cita-cita: ${d.cita||'-'}\n💬 "${d.motto||d.msg||''}"\n\n— PIONERA Generation 2025 | MA Al-Fakhriyah Baturaja\nhttps://liffkunz.github.io/Pionera/`;
   if (navigator.share) {
     navigator.share({ title:d.name, text }).catch(()=>{});
   } else {
-    navigator.clipboard?.writeText(text).then(() => {
-      $mShare.textContent = '✓ Disalin!';
-      setTimeout(() => { $mShare.innerHTML = '↗ Bagikan'; }, 2000);
-    });
+    navigator.clipboard?.writeText(text)
+      .then(() => showToast('✓ Profil berhasil disalin!'))
+      .catch(() => showToast('Gagal menyalin'));
   }
 });
+
+/* ── Modal swipe nav wiring (done after DOM ready via DOMContentLoaded listener below) ── */
+if ($modal) {
+  $modal.addEventListener('touchstart', e => { window._mTsx = e.changedTouches[0].screenX; }, {passive:true});
+  $modal.addEventListener('touchend',   e => {
+    if (!_currentModalList) return;
+    const d = (window._mTsx||0) - e.changedTouches[0].screenX;
+    if (Math.abs(d) > 55) d > 0 ? _openSantriAt(_currentModalIdx+1) : _openSantriAt(_currentModalIdx-1);
+  }, {passive:true});
+}
 
 /* ── Print PDF button (Feature H) ── */
 const $mPrint = $('mPrint');
@@ -553,7 +611,13 @@ if ($mPrint) $mPrint.addEventListener('click', () => {
   setTimeout(() => { window.print(); pb.style.display = 'none'; }, 200);
 });
 
-document.addEventListener('keydown', e => { if(e.key==='Escape'){ closeModal(); closeLb(); } });
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') { closeModal(); closeLb(); return; }
+  if (document.getElementById('lb')?.classList.contains('on')) {
+    if (e.key === 'ArrowLeft')  { lbIdx=(lbIdx-1+fItems.length)%fItems.length; updLb(); }
+    if (e.key === 'ArrowRight') { lbIdx=(lbIdx+1)%fItems.length; updLb(); }
+  }
+});
 
 /* ══════════════════════════════════════════════════
    RENDER: ELEMEN LOGO
@@ -677,13 +741,19 @@ function renderPesanWK(data, elId, storeKey) {
 function renderMurid(list, elId, storeKey, kelas) {
   const el = $(elId);
   if (!el) return;
+  list._kelas = kelas;
   STORE[storeKey] = list;
   el.innerHTML = list.map((s,i) => {
     const slug = s.name.toLowerCase().replace(/[^a-z\s]/g,'').trim().replace(/\s+/g,'-');
     return `
       <div class="mc rv d${(i%4)+1}" data-type="${storeKey}" data-idx="${i}"
            tabindex="0" role="button" aria-label="Lihat biodata ${esc(s.name)}">
-        <div class="mc-photo"><img src="assets/siswa/${slug}.jpg" alt="${esc(s.name)}" loading="lazy" onerror="this.src='${av(s.name)}'"/></div>
+        <div class="mc-photo">
+          <img src="assets/siswa/${slug}.jpg" alt="Foto ${esc(s.name)}, Santri ${esc(kelas)}"
+               loading="lazy"
+               onerror="this.src='${av(s.name)}';this.parentNode.classList.add('img-done')"
+               onload="this.classList.add('loaded');this.parentNode.classList.add('img-done')"/>
+        </div>
         <div class="mc-info"><p class="mc-name">${esc(s.name)}</p><p class="mc-hint">Lihat Biodata →</p></div>
       </div>`;
   }).join('');
@@ -691,10 +761,16 @@ function renderMurid(list, elId, storeKey, kelas) {
   el.addEventListener('click', e => {
     const card = e.target.closest(`[data-type="${storeKey}"]`);
     if (!card) return;
-    const s = STORE[storeKey][parseInt(card.dataset.idx,10)];
+    const idx = parseInt(card.dataset.idx, 10);
+    const s   = STORE[storeKey][idx];
     if (!s) return;
     const slug = s.name.toLowerCase().replace(/[^a-z\s]/g,'').trim().replace(/\s+/g,'-');
-    openModal({ photo:`assets/siswa/${slug}.jpg`, name:s.name, role:'Santri Pionera', group:kelas, msg:s.pesan, ttl:s.ttl, ig:s.ig, cita:s.cita, kesan:s.kesan, motto:s.motto, pesan:s.pesan });
+    _currentModalList = list;
+    _currentModalIdx  = idx;
+    openModal({ photo:`assets/siswa/${slug}.jpg`, name:s.name, role:'Santri Pionera',
+      group:kelas, msg:s.pesan, ttl:s.ttl, ig:s.ig,
+      cita:s.cita, kesan:s.kesan, motto:s.motto, pesan:s.pesan });
+    _updateModalNav();
   });
   el.addEventListener('keydown', e => {
     if (e.key!=='Enter'&&e.key!==' ') return;
@@ -825,6 +901,35 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollNav();
   initBTT();
   initParallax();
+
+  /* ── Wire modal nav swipe buttons ── */
+  const _nb = document.getElementById('mNavBar');
+  if (_nb) {
+    _nb.querySelector('.m-nav-prev')?.addEventListener('click', () => _openSantriAt(_currentModalIdx - 1));
+    _nb.querySelector('.m-nav-next')?.addEventListener('click', () => _openSantriAt(_currentModalIdx + 1));
+  }
+
+  /* ── Navbar active link highlight via scroll ── */
+  const _navLinks = document.querySelectorAll('.nlinks a[href^="#"]');
+  function _updateNavActive() {
+    const trigger = window.innerHeight * 0.35;
+    let bestId = null, bestDist = Infinity;
+    _navLinks.forEach(a => {
+      const id = a.getAttribute('href').replace('#','');
+      const el = document.getElementById(id);
+      if (!el) return;
+      const top = el.getBoundingClientRect().top;
+      if (top <= trigger + 50) {
+        const dist = Math.abs(top - trigger);
+        if (dist < bestDist) { bestDist = dist; bestId = id; }
+      }
+    });
+    _navLinks.forEach(a => {
+      const id = a.getAttribute('href').replace('#','');
+      a.classList.toggle('nav-act', id === bestId);
+    });
+  }
+  window.addEventListener('scroll', _updateNavActive, {passive:true});
   renderElem();
   renderSambutan();
   renderVidIndex();
