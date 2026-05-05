@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════
-   PIONERA GENERATION 2025 — script.js  v4
+   PIONERA GENERATION 2025 — script.js
    Features: scroll-nav, parallax, guru popup,
              share, print PDF, back-to-top,
              animated counters, download galeri
