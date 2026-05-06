@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════
-   PIONERA GENERATION 2025 — script.js
+   PIONERA GENERATION 2025 — script.js  v4
    Features: scroll-nav, parallax, guru popup,
              share, print PDF, back-to-top,
              animated counters, download galeri
@@ -460,18 +460,44 @@ function initCounters() {
       if (!e.isIntersecting) return;
       const el = e.target;
       const target = parseInt(el.dataset.count, 10);
-      if (isNaN(target)) return;
-      const dur = 1100, start = performance.now();
-      const update = now => {
-        const p = Math.min((now-start)/dur, 1);
-        el.textContent = Math.round((1-Math.pow(1-p,3))*target);
-        if (p < 1) requestAnimationFrame(update);
-      };
-      requestAnimationFrame(update);
+      const isInf = el.dataset.inf === '1';
+
+      if (!isNaN(target)) {
+        const dur = 1100, start = performance.now();
+        const update = now => {
+          const p = Math.min((now-start)/dur, 1);
+          const val = Math.round((1-Math.pow(1-p,3))*target);
+          el.textContent = val;
+          if (p < 1) requestAnimationFrame(update);
+          else if (isInf) {
+            // After counting, flip to ∞ with a brief pause
+            setTimeout(() => {
+              el.style.transition = 'opacity .3s';
+              el.style.opacity = '0';
+              setTimeout(() => {
+                el.textContent = '∞';
+                el.style.opacity = '1';
+              }, 300);
+            }, 400);
+          }
+        };
+        requestAnimationFrame(update);
+      } else if (isInf) {
+        // No target number, just animate to ∞
+        const dur = 800, start = performance.now();
+        const nums = ['0','1','3','7','∞'];
+        const update = now => {
+          const p = Math.min((now-start)/dur, 1);
+          const idx = Math.floor(p * (nums.length-1));
+          el.textContent = nums[Math.min(idx, nums.length-1)];
+          if (p < 1) requestAnimationFrame(update);
+        };
+        requestAnimationFrame(update);
+      }
       obs.unobserve(el);
     });
   }, { threshold:.5 });
-  document.querySelectorAll('[data-count]').forEach(el => obs.observe(el));
+  document.querySelectorAll('[data-count], [data-inf]').forEach(el => obs.observe(el));
 }
 
 /* ══════════════════════════════════════════════════
@@ -498,18 +524,29 @@ function openModal(d) {
   if (!$modal) return;
   currentModalData = d;
   _savedScroll = window.scrollY;
-  $mPhoto.src = d.photo || '';
-  $mPhoto.onerror = () => { $mPhoto.src = av(d.name); };
-  $mName.textContent  = d.name  || '';
-  $mRole.textContent  = d.role  || '';
-  $mGroup.textContent = d.group || '';
-  if (d.longMsg) {
-    $mMsg.innerHTML   = esc(d.msg||'').replace(/\n/g,'<br>');
-    $mMsg.style.textAlign = 'left';
-  } else {
-    $mMsg.textContent = d.msg || '';
-    $mMsg.style.textAlign = 'center';
+
+  // Photo col
+  const phCol = $modal.querySelector('.modal-photo-col');
+  if (phCol) {
+    const img = phCol.querySelector('.m-photo');
+    if (img) { img.src = d.photo||''; img.onerror = ()=>{img.src=av(d.name);}; }
+    const nm = phCol.querySelector('.m-name'); if(nm) nm.textContent = d.name||'';
+    const rl = phCol.querySelector('.m-role'); if(rl) rl.textContent = d.role||'';
+    const gr = phCol.querySelector('.m-group');if(gr) gr.textContent = d.group||'';
   }
+
+  // Message
+  if ($mMsg) {
+    if (d.longMsg) {
+      $mMsg.innerHTML   = esc(d.msg||'').replace(/\n/g,'<br>');
+      $mMsg.style.textAlign = 'left';
+    } else {
+      $mMsg.textContent = d.msg||'';
+      $mMsg.style.textAlign = 'center';
+    }
+  }
+
+  // Bio rows
   if ($mBio) {
     const rows = [];
     if (d.ttl)              rows.push(`<div class="m-bio-row"><span class="m-bio-icon">📅</span><div><span class="m-bio-lbl">Tempat, Tanggal Lahir</span><span class="m-bio-val">${esc(d.ttl)}</span></div></div>`);
@@ -518,8 +555,9 @@ function openModal(d) {
     if (d.kesan)            rows.push(`<div class="m-bio-row"><span class="m-bio-icon">💛</span><div><span class="m-bio-lbl">Kesan</span><span class="m-bio-val">${esc(d.kesan)}</span></div></div>`);
     if (d.motto)            rows.push(`<div class="m-bio-row"><span class="m-bio-icon">✨</span><div><span class="m-bio-lbl">Motto</span><span class="m-bio-val"><em style="color:rgba(240,200,74,.88)">"${esc(d.motto)}"</em></span></div></div>`);
     $mBio.innerHTML = rows.join('');
-    $mBio.style.display = rows.length ? 'block' : 'none';
+    $mBio.style.display = rows.length ? 'block':'none';
   }
+
   _updateModalNav();
   $modal.classList.add('on');
   document.body.classList.add('lock');
@@ -535,15 +573,21 @@ function closeModal() {
 }
 
 function _updateModalNav() {
-  const nb = document.getElementById('mNavBar'); if (!nb) return;
-  if (!_currentModalList || _currentModalList.length <= 1) { nb.style.display='none'; return; }
-  nb.style.display = 'flex';
-  const prev = nb.querySelector('.m-nav-prev');
-  const next = nb.querySelector('.m-nav-next');
-  const ctr  = nb.querySelector('.m-nav-counter');
-  if (prev) prev.disabled = _currentModalIdx <= 0;
-  if (next) next.disabled = _currentModalIdx >= _currentModalList.length - 1;
-  if (ctr)  ctr.textContent = `${_currentModalIdx+1} / ${_currentModalList.length}`;
+  const nb  = document.getElementById('mNavBar');
+  const nbm = document.getElementById('mNavBarMobile');
+  const has = _currentModalList && _currentModalList.length > 1;
+  [nb, nbm].forEach(bar => { if(bar) bar.style.display = has ? 'flex' : 'none'; });
+  if (!has) return;
+  const len = _currentModalList.length;
+  [nb, nbm].forEach(bar => {
+    if (!bar) return;
+    const prev = bar.querySelector('[class*="m-nav-prev"]');
+    const next = bar.querySelector('[class*="m-nav-next"]');
+    const ctr  = bar.querySelector('[class*="m-nav-counter"]');
+    if (prev) prev.disabled = _currentModalIdx <= 0;
+    if (next) next.disabled = _currentModalIdx >= len - 1;
+    if (ctr)  ctr.textContent = `${_currentModalIdx+1} / ${len}`;
+  });
 }
 
 function _openSantriAt(idx) {
@@ -585,7 +629,7 @@ if ($modal) {
 
 /* ── Print PDF button (Feature H) ── */
 const $mPrint = $('mPrint');
-if ($mPrint) $mPrint.addEventListener('click', () => {
+if ($mPrint) $mPrint.addEventListener('click', () => { return; // disabled
   const d = currentModalData;
   if (!d) return;
   const pb = $('print-bio');
@@ -689,15 +733,11 @@ function renderGuru() {
   const gPos   = $('guruPos');
   const gNoPos = $('guruNoPos');
   const mkCard = (name, pos, photo, i) => `
-    <div class="gc rv d${(i%4)+1}">
-      <div class="gc-photo"><img src="${esc(photo)}" alt="${esc(name)}" loading="lazy" onerror="this.src='${av(name)}'"/></div>
+    <div class="gc rv d${(i%4)+1}" title="${esc(name)}${pos ? ' — '+esc(pos) : ''}">
+      <div class="gc-photo"><img src="${esc(photo)}" alt="Foto ${esc(name)}" loading="lazy" onerror="this.src='${av(name)}'"/></div>
       <div class="gc-info">
         <p class="gc-name">${esc(name)}</p>
         ${pos ? `<p class="gc-pos">${esc(pos)}</p>` : ''}
-      </div>
-      <div class="gc-popup">
-        <p class="gc-popup-name">${esc(name)}</p>
-        ${pos ? `<p class="gc-popup-pos">${esc(pos)}</p>` : ''}
       </div>
     </div>`;
   if (gPos)   gPos.innerHTML   = guruPos.map((g,i) => mkCard(g.name, g.pos, g.photo, i)).join('');
@@ -897,6 +937,62 @@ if ($lb) {
 /* ══════════════════════════════════════════════════
    INIT
    ══════════════════════════════════════════════════ */
+
+/* ══════════════════════════════════════════════════
+   SEJARAH + VISI-MISI — click to expand popup
+   ══════════════════════════════════════════════════ */
+function initSejarahExpand() {
+  // Sejarah card
+  const sejCard = document.querySelector('.sej-card');
+  if (sejCard) {
+    sejCard.addEventListener('click', () => {
+      openModal({
+        photo: 'assets/sejarah/gedung.jpg',
+        name:  'Pondok Pesantren Al-Fakhriyah',
+        role:  'Baturaja, Sumatera Selatan · Est. 2018',
+        group: 'Jl. H.M. Moeslimin RT.004 Dusun IV, Kel. Kemalaraja, Kec. Baturaja Timur, Kab. OKU',
+        msg:   `Pondok Pesantren Al-Fakhriyah Baturaja adalah salah satu bentuk satuan pendidikan Pondok Pesantren yang menyelenggarakan pendidikan formal dengan program pendidikan umum dan pendidikan keagamaan Islam.
+
+Berdiri sejak Tahun 2018 di bawah naungan Yayasan Al-Fakhriyah Baturaja dan secara resmi mendapatkan Izin Operasional pada tahun 2020. Berdirinya pondok pesantren ini merupakan wujud panggilan jiwa dari pengasuh bersama pengurus yayasan yang memiliki komitmen tinggi dalam mendirikan pondok pesantren di dalam kota Baturaja sebagai ibu kota Kabupaten OKU.
+
+Dengan harapan para santri yang belajar di sini nantinya menjadi ummat yang mempunyai Ilmu Dasar Aqidah yang kuat, mampu memahami hukum syariat Islam, mencintai ilmu pengetahuan agama dan mampu mengamalkannya dengan baik serta memiliki Iman dan Taqwa yang kokoh.`,
+        longMsg: true
+      });
+    });
+  }
+
+  // Visi card
+  document.querySelectorAll('.vm-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const isVisi = card.querySelector('.vm-label')?.textContent?.includes('Visi');
+      if (isVisi) {
+        openModal({
+          name: 'Visi Madrasah',
+          role: 'MA Al-Fakhriyah Baturaja',
+          group: '',
+          msg: 'Madrasah Unggul yang Mampu Mencetak Generasi Bangsa yang Qur'ani, Berakhlakul Karimah, Berkualitas, Mandiri dan Berprestasi.',
+        });
+      } else {
+        openModal({
+          name: 'Misi Madrasah',
+          role: 'MA Al-Fakhriyah Baturaja',
+          group: '',
+          msg: `1. Mewujudkan lembaga pendidikan swasta yang bermutu dan berkualitas
+
+2. Mewujudkan lembaga pendidikan yang terjangkau dan membanggakan masyarakat luas
+
+3. Mencetak generasi bangsa yang Qur'ani dan berakhlakul karimah
+
+4. Mewujudkan peserta didik yang berprestasi dan berdaya saing nasional & internasional
+
+5. Mewujudkan lulusan yang memiliki wawasan mandiri dan terampil sesuai kebutuhan zaman`,
+          longMsg: true
+        });
+      }
+    });
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initScrollNav();
   initBTT();
@@ -907,6 +1003,11 @@ document.addEventListener('DOMContentLoaded', () => {
   if (_nb) {
     _nb.querySelector('.m-nav-prev')?.addEventListener('click', () => _openSantriAt(_currentModalIdx - 1));
     _nb.querySelector('.m-nav-next')?.addEventListener('click', () => _openSantriAt(_currentModalIdx + 1));
+  }
+  const _nbm = document.getElementById('mNavBarMobile');
+  if (_nbm) {
+    _nbm.querySelector('.m-nav-prev-m')?.addEventListener('click', () => _openSantriAt(_currentModalIdx - 1));
+    _nbm.querySelector('.m-nav-next-m')?.addEventListener('click', () => _openSantriAt(_currentModalIdx + 1));
   }
 
   /* ── Navbar active link highlight via scroll ── */
@@ -942,6 +1043,7 @@ document.addEventListener('DOMContentLoaded', () => {
   renderGal('all');
   setupFilters();
   initCounters();
+  initSejarahExpand();
   reveal();
 });
 
