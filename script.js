@@ -970,7 +970,7 @@ Dengan harapan para santri yang belajar di sini nantinya menjadi ummat yang memp
           name: 'Visi Madrasah',
           role: 'MA Al-Fakhriyah Baturaja',
           group: '',
-          msg: 'Madrasah Unggul yang Mampu Mencetak Generasi Bangsa yang Qur'ani, Berakhlakul Karimah, Berkualitas, Mandiri dan Berprestasi.',
+          msg: "Madrasah Unggul yang Mampu Mencetak Generasi Bangsa yang Qur'ani, Berakhlakul Karimah, Berkualitas, Mandiri dan Berprestasi.",
         });
       } else {
         openModal({
