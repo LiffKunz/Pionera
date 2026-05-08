@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://liffkunz.github.io/Pionera/sitemap.xml
