@@ -7,6 +7,17 @@
    ═══════════════════════════════════════════════════ */
 'use strict';
 
+/* ── visibility flag (must be at top, used by canvas RAF) ── */
+let _rafPaused = false;
+document.addEventListener('visibilitychange', () => { _rafPaused = document.hidden; });
+
+/* ── global state ── */
+let fItems = [], lbIdx = 0;
+let _currentModalList = null, _currentModalIdx = -1;
+let currentModalData  = null;
+let _savedScroll      = 0;
+let _toastEl          = null;
+
 const $ = id => document.getElementById(id);
 const av  = n => `https://ui-avatars.com/api/?name=${encodeURIComponent(n)}&background=0d2240&color=d4a843&size=200&bold=true&font-size=0.36`;
 const gph = l => `https://placehold.co/800x600/071828/d4a843?text=${encodeURIComponent(l)}`;
@@ -247,7 +258,7 @@ const ICONS = {
 /* ══════════════════════════════════════════════════
    TOAST + SCROLL RESTORE
    ══════════════════════════════════════════════════ */
-let _toastEl = null;
+_toastEl = null;
 function showToast(msg, dur=2200) {
   if (!_toastEl) {
     _toastEl = document.createElement('div');
@@ -259,8 +270,7 @@ function showToast(msg, dur=2200) {
   clearTimeout(_toastEl._t);
   _toastEl._t = setTimeout(() => _toastEl.classList.remove('show'), dur);
 }
-let _savedScroll = 0;
-let _currentModalList = null, _currentModalIdx = -1;
+_savedScroll = 0;
 
 /* ══════════════════════════════════════════════════
    LOADER — 2 seconds
@@ -519,7 +529,7 @@ const $mGroup = $('mGroup');
 const $mMsg   = $('mMsg');
 const $mBio   = $('mBio');
 
-let currentModalData = null;
+currentModalData = null;
 
 function openModal(d) {
   if (!$modal) return;
@@ -849,7 +859,6 @@ function renderGalVid() {
 /* ══════════════════════════════════════════════════
    GALLERY PHOTOS + DOWNLOAD Feature C
    ══════════════════════════════════════════════════ */
-let fItems = [], lbIdx = 0;
 
 function renderGal(filter) {
   const g = $('galGrid');
@@ -1045,13 +1054,7 @@ function initPageTransition() {
   });
 }
 
-/* ══════════════════════════════════════════════════
-   VISIBILITY — pause canvas RAF when tab hidden
-   ══════════════════════════════════════════════════ */
-let _rafPaused = false;
-document.addEventListener('visibilitychange', () => {
-  _rafPaused = document.hidden;
-});
+
 
 document.addEventListener('DOMContentLoaded', () => {
   initScrollNav();
